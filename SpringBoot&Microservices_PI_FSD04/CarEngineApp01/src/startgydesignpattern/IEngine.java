@@ -1,7 +1,5 @@
 package startgydesignpattern;
 
-public interface Engine {
-
+public interface IEngine {
 	public int start();
-
 }
