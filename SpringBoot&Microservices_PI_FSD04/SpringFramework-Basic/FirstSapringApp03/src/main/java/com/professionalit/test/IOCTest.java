@@ -3,6 +3,7 @@ package com.professionalit.test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.professionalit.bean.Customer;
 import com.professionalit.bean.Product;
 
 public class IOCTest {
@@ -11,11 +12,12 @@ public class IOCTest {
 
 		// IOC Container
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("./applicationContext.xml");
-		Product product=(Product)applicationContext.getBean("product");
-		product.getProduct();
+		Product product = (Product) applicationContext.getBean("product");
+		System.out.println(product);
 		
-		Product product1=(Product)applicationContext.getBean("product");
-       System.out.println(product.hashCode() + " "+ product1.hashCode() );
+		Customer customer = (Customer) applicationContext.getBean("customer");
+		System.out.println(customer);
+
 	}
 
 }

@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="product" class="com.professionalit.bean.Product">
+		<constructor-arg name="productId" value="101"></constructor-arg>
+		<constructor-arg name="productName" value="Iphone"></constructor-arg>
+	</bean>
+
+
+	<bean id="product2" class="com.professionalit.bean.Product">
+		<constructor-arg name="productId" value="102"></constructor-arg>
+		<constructor-arg name="productName" value="Bag"></constructor-arg>
+	</bean>
+
+	<bean id="customer" class="com.professionalit.bean.Customer">
+		<constructor-arg name="customerId" value="1001"></constructor-arg>
+		<constructor-arg name="customerName" value="Smith"></constructor-arg>
+		<constructor-arg name="contantNumber" value="+45-454575151"></constructor-arg>
+		<constructor-arg name="address" ref="address"></constructor-arg>
+		<constructor-arg>
+			<list>
+				 <ref  bean="product"/>
+                 <ref  bean="product2"/>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="address" class="com.professionalit.bean.Address">
+		<constructor-arg name="city" value="pune"></constructor-arg>
+		<constructor-arg name="state" value="Maharastra"></constructor-arg>
+	</bean>
+
+
+</beans>
