@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="userController"
+		class="com.professionalit.controller.UserController">
+		<property name="userService" ref="userService"></property>
+	</bean>
+
+	<bean id="userService"
+		class="com.professionalit.service.UserServiceImpl">
+		<property name="userDAO" ref="userOracle"></property>
+		<property name="emailUtil" ref="email"></property>
+		<property name="messageUtil" ref="message"></property>
+		<property name="passwordUtil" ref="password"></property>
+		<property name="redisCache" ref="redis"></property>
+	</bean>
+
+	<bean id="userMySql"
+		class="com.professionalit.dao.UserMySqlDAOImpl"></bean>
+
+	<bean id="userOracle"
+		class="com.professionalit.dao.UserOracleDAOImpl"> </bean>
+
+	<bean id="email"
+		class="com.professionalit.util.EmailUtil"> </bean>
+	<bean id="message"
+		class="com.professionalit.util.MessageUtil"> </bean>
+	<bean id="password"
+		class="com.professionalit.util.PasswordUtil"> </bean>
+	<bean id="redis"
+		class="com.professionalit.util.RedisCache"> </bean>
+
+</beans>
