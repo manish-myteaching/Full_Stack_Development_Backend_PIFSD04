@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: SpringBoot-PropertyConfig
+  datasource:
+    username: manish
+    url: jdbc:oracle://10.45.82.1:8080
+    password: manish
+ 
+myapp:
+  custom:
+    property: value
+  env:
+    list: dev,qa,uat,prod
