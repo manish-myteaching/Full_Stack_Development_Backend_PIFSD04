@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+
+    <!-- Conditional message -->
+    <div th:if="${message}">
+        <h2 style="color:red" th:text="${message}"></h2>
+    </div>
+
+    <h2>Login</h2>
+
+    <form th:action="@{/login}" method="post">
+        <label for="userid">User ID:</label><br />
+        <input type="text" id="userid" name="userid" required /><br /><br />
+
+        <label for="password">Password:</label><br />
+        <input type="password" id="password" name="password" required /><br /><br />
+
+        <input type="submit" value="Login" />
+    </form>
+
+</body>
+</html>
