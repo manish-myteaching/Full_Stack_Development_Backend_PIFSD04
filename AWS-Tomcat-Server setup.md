@@ -64,7 +64,7 @@ vi conf/tomcat-users.xml
 Add the following line **before `</tomcat-users>`**:
 
 ```xml
-<user username="sampath" password="sampath" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
+<user username="manish" password="manish" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
 ```
 
 Save and exit:
