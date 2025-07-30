@@ -1,26 +1,31 @@
-# 🚀 Step-by-Step Guide: Install Apache Tomcat on Amazon Linux
+# 🚀 Step-by-Step Guide: Install Apache Tomcat on Amazon Linux (EC2)
 
-## 📋 Prerequisites
-- ✅ Amazon Linux EC2 instance with **minimum 1GB RAM**
-- ✅ Port **8080** open in EC2 **Security Group**
-- ✅ Access to terminal via SSH
+This guide helps you install **Apache Tomcat 10.1.9** on an **Amazon Linux EC2** instance using a dedicated user and secure configuration.
 
 ---
 
-## 🔧 Step 1: Install Java
+## 📋 Prerequisites
 
-Apache Tomcat requires Java. Use the command below to install Java 11:
+- ✅ Amazon Linux EC2 Instance (t2.micro or higher, 1GB+ RAM)
+- ✅ Port **8080** opened in the **EC2 Security Group**
+- ✅ SSH access to your instance
+
+---
+
+## 🔧 Step 1: Install Java 11
+
+Apache Tomcat 10 requires Java 11+.
 
 ```bash
 sudo su -
 amazon-linux-extras install java-openjdk11 -y
 ```
 
-> 🔗 Check compatible Java version with Tomcat: [https://tomcat.apache.org/whichversion.html](https://tomcat.apache.org/whichversion.html)
+🔗 Java compatibility with Tomcat: [Which Java Version?](https://tomcat.apache.org/whichversion.html)
 
 ---
 
-## 📦 Step 2: Download and Extract Tomcat 10
+## 📦 Step 2: Download & Extract Apache Tomcat 10.1.9
 
 ```bash
 cd /opt
@@ -31,19 +36,18 @@ mv apache-tomcat-10.1.9 tomcat
 
 ---
 
-## 👤 Step 3: Create a Dedicated Tomcat User
+## 👤 Step 3: Create a Dedicated `tomcat` User
 
 ```bash
-sudo su -
 adduser tomcat
 passwd tomcat
 ```
 
-Enter and confirm the password when prompted.
+💡 This avoids running Tomcat as root.
 
 ---
 
-## 🔑 Step 4: Set Ownership of Tomcat Directory
+## 🔑 Step 4: Set Ownership to `tomcat` User
 
 ```bash
 chown -R tomcat:tomcat /opt/tomcat
@@ -51,9 +55,7 @@ chown -R tomcat:tomcat /opt/tomcat
 
 ---
 
-## ⚙️ Step 5: Configure Tomcat Users
-
-Switch to the `tomcat` user:
+## ⚙️ Step 5: Configure Tomcat Manager Credentials
 
 ```bash
 su - tomcat
@@ -61,47 +63,50 @@ cd /opt/tomcat
 vi conf/tomcat-users.xml
 ```
 
-Add the following line **before `</tomcat-users>`**:
+Add this inside `<tomcat-users>` tag:
 
 ```xml
-<user username="manish" password="manish" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
+<user username="sampath" password="sampath" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
 ```
-
-Save and exit:
-- Press `Esc`
-- Type `:wq` and press `Enter`
 
 ---
 
-## 🚫 Step 6: Comment `<Valve>` Tag in `context.xml` Files
+## 🚫 Step 6: Enable Remote Access to Manager Apps
+
+Find and edit the following files:
 
 ```bash
 cd /opt/tomcat
 find . -name context.xml
 ```
 
-Edit each of the following files and **comment out** the `<Valve>` tag (if present):
+Modify the below files to comment out `<Valve>`:
 
 ```bash
-vi ./webapps/examples/META-INF/context.xml
-vi ./webapps/host-manager/META-INF/context.xml
-vi ./webapps/manager/META-INF/context.xml
+vi webapps/manager/META-INF/context.xml
+vi webapps/host-manager/META-INF/context.xml
+vi webapps/examples/META-INF/context.xml
+```
+
+Example:
+
+```xml
+<!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+       allow="127\.\d+\.\d+\.\d+|::1" /> -->
 ```
 
 ---
 
-## ✅ Step 7: Verify Execute Permission for Scripts
+## ✅ Step 7: Ensure Execute Permission on Scripts
 
 ```bash
 cd /opt/tomcat/bin
-chmod +x catalina.sh startup.sh shutdown.sh
+chmod +x *.sh
 ```
 
 ---
 
-## 🔗 Step 8: Create Shortcut Commands (Optional)
-
-> Note: Update paths if using Tomcat 10 instead of Tomcat 9
+## 🔗 Step 8: Create Tomcat Start/Stop Shortcuts (Optional)
 
 ```bash
 ln -s /opt/tomcat/bin/startup.sh /usr/local/bin/tomcatup
@@ -116,35 +121,46 @@ ln -s /opt/tomcat/bin/shutdown.sh /usr/local/bin/tomcatdown
 tomcatup
 ```
 
+Or directly:
+
+```bash
+/opt/tomcat/bin/startup.sh
+```
+
 ---
 
 ## 🌐 Step 10: Access Tomcat in Browser
 
-Open your browser and enter:
+Navigate to:
 
 ```
 http://<Your-EC2-Public-IP>:8080/
 ```
 
-You should see the **Tomcat welcome page**!
+Use the credentials to access manager pages:
 
-To access advanced pages (Server Status, Manager App):
-
-- **Username:** `sampath`
-- **Password:** `sampath`
+- Username: `manish`
+- Password: `manish`
 
 ---
 
-## 📸 Screenshots Reference
+## 📸 Screenshots
 
-### Tomcat Dashboard
+### Tomcat Default Page
+
 ![Tomcat Home](https://user-images.githubusercontent.com/119833411/241392947-688e9545-db12-4f3e-8c57-e97e40520a50.jpg)
 
-### Tomcat User Setup
+### Tomcat User Configuration
+
 ![User Setup](https://user-images.githubusercontent.com/119833411/241391537-6601999f-5c4d-4bfc-a3b7-d759cd2a4397.jpg)
 
 ---
 
-## ✅ Completed!
+## ✅ Success!
 
-Tomcat is now running on your **Amazon Linux EC2** instance. You can deploy Java web apps via the Manager GUI or directly to `/opt/tomcat/webapps`.
+Tomcat 10 is now running on your Amazon Linux EC2 instance.
+
+📂 Deploy your WAR files to: `/opt/tomcat/webapps`
+
+🔐 Secure production deployments using a reverse proxy and HTTPS.
+
